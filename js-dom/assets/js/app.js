@@ -9,16 +9,18 @@ class Component {
 }
 
 class Product extends Component {
-	constructor({ id, name, description, price, image }) {
+	constructor({ id, name, description, price, image }, parentId = "app") {
 		super();
 		this.id = id;
 		this.name = name;
 		this.description = description;
 		this.price = price;
 		this.image = image;
+		this.parentId = parentId;
+		this.render();
 	}
 
-	render(parentId = "app") {
+	render() {
 		const article = this.createElement("article", [
 			"rounded-xl",
 			"flex",
@@ -38,36 +40,34 @@ class Product extends Component {
 				</div>
 			</div>
 		`;
-		const parent = document.getElementById(parentId)
-		parent.appendChild(article)
+		const parent = document.getElementById(this.parentId);
+		parent.appendChild(article);
 	}
 }
 
 class ProductList extends Component {
-	// Cette classe sera chargée de créer une section avec un titre h2 et devra ensuite afficher tout les produits à l'intérieur de cette section
-	render(parentId = "app") {
+	constructor(parentId = "app") {
+		super();
+		this.parentId = parentId;
+		this.render();
+	}
+	render() {
 		const list = this.createElement("section");
 		list.setAttribute("id", "product-list");
-		list.innerHTML = "<h2 class='text-center text-xl uppercase tracking-widest'>Store</h2>"
-		const parent = document.getElementById(parentId)
-		parent.appendChild(list)
+		list.innerHTML =
+			"<h2 class='text-center text-xl uppercase tracking-widest'>Store</h2>";
+		const parent = document.getElementById(this.parentId);
+		parent.appendChild(list);
 		for (const product of products) {
-			const productItem = new Product(product);
-			productItem.render("product-list");
+			new Product(product);
 		}
 	}
 }
 
 class App {
 	static init() {
-		// for (const product of products) {
-		// 	const productItem = new Product(product);
-		// 	productItem.render();
-		// }
-		const productList = new ProductList();
-		productList.render()
-		const cartItem = new Cart();
-		cartItem.render();
+		new ProductList();
+		new Cart();
 	}
 }
 
@@ -90,7 +90,12 @@ const products = [
 ];
 
 class Cart extends Component {
-	render(parentId = "app") {
+	constructor(parentId = "app") {
+		super();
+		this.parentId = parentId;
+		this.render();
+	}
+	render() {
 		const aside = this.createElement("aside", ["rounded-xl", "shadow-lg"]);
 		aside.innerHTML = `
 			<div class="p-4">
@@ -101,8 +106,8 @@ class Cart extends Component {
 				<span class="text-blue-700 font-semibold">Total 100€</span>
 			</div>
 		`;
-		const parent = document.getElementById(parentId)
-		parent.appendChild(aside)
+		const parent = document.getElementById(this.parentId);
+		parent.appendChild(aside);
 	}
 }
 

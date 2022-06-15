@@ -2,6 +2,7 @@ import logo from "./logo.svg";
 import customClasses from "./App.module.css";
 import { Component } from "react";
 import Button from "./components/Button";
+import DiscoBox from './components/DiscoBox/DiscoBox'
 
 // class App extends Component {
 //   name = "Fabio";
@@ -30,6 +31,12 @@ function App(props) {
 			</h1>
 			<h2>{props.welcomeMessage}</h2>
 			<Button>Envoyer</Button>
+			<DiscoBox />
+			<h2>Exercice</h2>
+			<p>Créer un composant "CreateBox" qui créer un nouvel li avec un nombre aléatoire dès aue l'on clique sur le bouton de notre composant.</p>
+			<section>
+				<button>CreateBox</button>
+			</section>
 		</section>
 	);
 }

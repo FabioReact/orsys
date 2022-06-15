@@ -1,3 +1,7 @@
+body {
+  margin: 0;
+}
+
 .cyan {
   color: rgb(0, 147, 147);
 }

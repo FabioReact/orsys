@@ -1,20 +1,32 @@
-console.log("Script App launched");
-
 const app = document.getElementById("app");
-app.innerHTML = "Content injected by Javascript";
 
-class Product {
+class Component {
+	createElement(tagName, classnames) {
+		const rootElement = document.createElement(tagName);
+		rootElement.classList.add(...classnames);
+		return rootElement;
+	}
+}
+
+class Product extends Component {
 	constructor({ id, name, description, price, image }) {
-		this.id = id
-		this.name = name
-		this.description = description
-		this.price = price
-		this.image = image
+		super();
+		this.id = id;
+		this.name = name;
+		this.description = description;
+		this.price = price;
+		this.image = image;
 	}
 
-	render() {
-		const article = document.createElement("article");
-		article.classList.add('rounded-xl', 'flex', 'flex-col', 'w-72', 'shadow-lg', 'overflow-hidden')
+	render(parentId = "app") {
+		const article = this.createElement("article", [
+			"rounded-xl",
+			"flex",
+			"flex-col",
+			"w-72",
+			"shadow-lg",
+			"overflow-hidden",
+		]);
 		article.innerHTML = `
 			<img src="${this.image}" alt="${this.name}" />
 			<div class="p-4">
@@ -26,17 +38,24 @@ class Product {
 				</div>
 			</div>
 		`;
-		return article
+		const parent = document.getElementById(parentId)
+		parent.appendChild(article)
 	}
+}
+
+class ProductList {
+	// Cette classe sera chargée de créer une section avec un titre h2 et devra ensuite afficher tout les produits à l'intérieur de cette section
 }
 
 class App {
 	static init() {
 		for (const product of products) {
-			const productItem = new Product(product)
-			const article = productItem.render()
-			app.appendChild(article)
+			const productItem = new Product(product);
+			productItem.render();
 		}
+		// const productList = new ProductList();
+		const cartItem = new Cart();
+		cartItem.render();
 	}
 }
 
@@ -53,8 +72,26 @@ const products = [
 		name: "Tshirt",
 		description: "Colorful Shirt",
 		price: 20,
-		image: "https://cdn.hoodielab.com/wp-content/uploads/2020/12/4_T-Shirt-Full-Edit-Front-6-400x400.jpg",
+		image:
+			"https://cdn.hoodielab.com/wp-content/uploads/2020/12/4_T-Shirt-Full-Edit-Front-6-400x400.jpg",
 	},
 ];
+
+class Cart extends Component {
+	render(parentId = "app") {
+		const aside = this.createElement("aside", ["rounded-xl", "shadow-lg"]);
+		aside.innerHTML = `
+			<div class="p-4">
+				<h3 class="uppercase tracking-widest text-center text-xl font-light">Panier</h3>
+				<p class="text-gray-600 text-sm py-2">Produit 1</p>
+				<p class="text-gray-600 text-sm py-2">Produit 2</p>
+				<p class="text-gray-600 text-sm py-2">Produit 3</p>
+				<span class="text-blue-700 font-semibold">Total 100€</span>
+			</div>
+		`;
+		const parent = document.getElementById(parentId)
+		parent.appendChild(aside)
+	}
+}
 
 App.init();

@@ -41,6 +41,12 @@ class Product extends Component {
 			</div>
 		`;
 		const parent = document.getElementById(this.parentId);
+		article.querySelector("button").addEventListener("click", () => {
+			App.addProductToCart({
+				name: this.name,
+				price: this.price,
+			});
+		});
 		parent.appendChild(article);
 	}
 }
@@ -66,8 +72,13 @@ class ProductList extends Component {
 
 class App {
 	static init() {
+		this.cart = new Cart();
 		new ProductList();
-		new Cart();
+	}
+
+	static addProductToCart(product) {
+		this.cart.addToCart(product);
+		// this.cart.setCart = product;
 	}
 }
 
@@ -90,22 +101,52 @@ const products = [
 ];
 
 class Cart extends Component {
+	#cartItems = [];
 	constructor(parentId = "app") {
 		super();
 		this.parentId = parentId;
 		this.render();
 	}
+
+	get getTotal() {
+		return this.#cartItems.reduce((acc, p) => acc + p.price, 0)
+	}
+
+	set setCart(product) {
+		this.#cartItems.push(product);
+		document.getElementById("cart-list").innerHTML = this.#cartItems.reduce(
+			(accumulateur, item) =>
+				`${accumulateur}<p>${item.name} <span>x1</span> <span>${item.price}€</span></p>`,
+			"",
+		);
+		document.getElementById("cart-total").innerHTML = `Total ${this.getTotal}€`
+	}
+
+	addToCart(product) {
+		this.#cartItems.push(product);
+		document.getElementById("cart-list").innerHTML = this.#cartItems.reduce(
+			(accumulateur, item) =>
+				`${accumulateur}<p>${item.name} <span>x1</span> <span>${item.price}€</span></p>`,
+			"",
+		);
+		document.getElementById("cart-total").innerHTML = `Total ${this.getTotal}€`
+	}
+
 	render() {
 		const aside = this.createElement("aside", ["rounded-xl", "shadow-lg"]);
 		aside.innerHTML = `
 			<div class="p-4">
 				<h3 class="uppercase tracking-widest text-center text-xl font-light">Panier</h3>
-				<p class="text-gray-600 text-sm py-2">Produit 1</p>
-				<p class="text-gray-600 text-sm py-2">Produit 2</p>
-				<p class="text-gray-600 text-sm py-2">Produit 3</p>
-				<span class="text-blue-700 font-semibold">Total 100€</span>
+				<div id="cart-list">
+					${this.#cartItems.map(
+						(item) =>
+							`<p>${item.name} <span>x1</span> <span>${item.price}€</span></p>`,
+					)}
+				</div>
+				<span id="cart-total" class="text-blue-700 font-semibold">Total ${this.getTotal}€</span>
 			</div>
 		`;
+
 		const parent = document.getElementById(this.parentId);
 		parent.appendChild(aside);
 	}

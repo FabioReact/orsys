@@ -1,7 +1,7 @@
 const app = document.getElementById("app");
 
 class Component {
-	createElement(tagName, classnames) {
+	createElement(tagName, classnames = []) {
 		const rootElement = document.createElement(tagName);
 		rootElement.classList.add(...classnames);
 		return rootElement;
@@ -43,17 +43,29 @@ class Product extends Component {
 	}
 }
 
-class ProductList {
+class ProductList extends Component {
 	// Cette classe sera chargée de créer une section avec un titre h2 et devra ensuite afficher tout les produits à l'intérieur de cette section
+	render(parentId = "app") {
+		const list = this.createElement("section");
+		list.setAttribute("id", "product-list");
+		list.innerHTML = "<h2 class='text-center text-xl uppercase tracking-widest'>Store</h2>"
+		const parent = document.getElementById(parentId)
+		parent.appendChild(list)
+		for (const product of products) {
+			const productItem = new Product(product);
+			productItem.render("product-list");
+		}
+	}
 }
 
 class App {
 	static init() {
-		for (const product of products) {
-			const productItem = new Product(product);
-			productItem.render();
-		}
-		// const productList = new ProductList();
+		// for (const product of products) {
+		// 	const productItem = new Product(product);
+		// 	productItem.render();
+		// }
+		const productList = new ProductList();
+		productList.render()
 		const cartItem = new Cart();
 		cartItem.render();
 	}

@@ -1,7 +1,9 @@
-const argon2 = require("argon2");
-const { v4: uuidv4 } = require("uuid");
+import argon2 from "argon2";
+import { FastifyInstance, FastifyServerOptions } from 'fastify'
+import { v4 as uuidv4 } from "uuid";
 
-module.exports = function (fastify, opts, done) {
+export default async (fastify: FastifyInstance, opts: FastifyServerOptions) => {
+
 	const options = {
 		schema: {
 			body: {
@@ -16,11 +18,16 @@ module.exports = function (fastify, opts, done) {
 		},
 	};
 
-	fastify.post("/register", options, async (request, reply) => {
+	fastify.post<{
+		Body: {
+			username: string,
+			password: string,
+		}
+	}>("/register", options, async (request, reply) => {
 		try {
 			const hash = await argon2.hash(request.body.password);
 			const id = uuidv4();
-			request.users.push({
+			(request as any).users.push({
 				id, // equivalent à id: id
 				username: request.body.username,
 				password: hash,
@@ -36,5 +43,4 @@ module.exports = function (fastify, opts, done) {
 			});
 		}
 	});
-	done();
 };

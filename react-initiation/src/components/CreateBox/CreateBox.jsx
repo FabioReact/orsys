@@ -20,8 +20,8 @@ const CreateBox = () => {
 		<section>
 			<button onClick={handleClick}>CreateBox</button>
 			<ul>
-				{numbers.map((number) => (
-					<LiItem number={number} />
+				{numbers.map((number, index) => (
+					<LiItem key={index} number={number} />
 				))}
 			</ul>
 		</section>

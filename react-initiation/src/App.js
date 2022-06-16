@@ -4,6 +4,7 @@ import { Component } from "react";
 import Button from "./components/Button";
 import DiscoBox from "./components/DiscoBox/DiscoBox";
 import CreateBox from "./components/CreateBox/CreateBox";
+import FetchPosts from './components/FetchPosts/FetchPosts'
 
 // class App extends Component {
 //   name = "Fabio";
@@ -39,6 +40,7 @@ function App(props) {
 				aléatoire dès aue l'on clique sur le bouton de notre composant.
 			</p>
 			<CreateBox />
+			<FetchPosts />
 		</section>
 	);
 }

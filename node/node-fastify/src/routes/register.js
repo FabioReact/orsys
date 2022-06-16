@@ -2,7 +2,7 @@ const argon2 = require("argon2");
 const { v4: uuidv4 } = require("uuid");
 
 module.exports = function (fastify, opts, done) {
-  const options = {
+	const options = {
 		schema: {
 			body: {
 				type: "object",
@@ -36,5 +36,5 @@ module.exports = function (fastify, opts, done) {
 			});
 		}
 	});
-  done()
-}
+	done();
+};
